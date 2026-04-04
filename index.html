@@ -55,7 +55,7 @@
             width: 130px;
             height: 130px;
             border-radius: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 10px;20px rgba(0,0,0,0.4);
             border: 3px solid #00c853;
         }
 
@@ -136,6 +136,29 @@
             opacity: 0.6;
             letter-spacing: 1px;
         }
+
+        /* --- NEW CODE ADDED AS REQUESTED BY USER --- */
+        /* Ye naye CSS styles buttons ke niche counters dikhane ke liye hain */
+        .live-counter {
+            font-size: 11px;
+            color: #00ff87;
+            margin-top: -12px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 255, 135, 0.3);
+        }
+
+        .download-counter {
+            font-size: 11px;
+            color: #ffffff;
+            margin-top: -12px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+        /* --- END OF NEW CSS --- */
     </style>
 </head>
 <body>
@@ -148,25 +171,29 @@
         <h1>Tic Tac Toe Pro</h1>
         <p class="tagline">Aapka favourite game ab aur bhi behtar! <br> Online khele ya APK download karein.</p>
 
-        <a href="play.html" class="btn play-btn">
+        <a href="play.html" class="btn play-btn" id="btn-ttt">
             🎮 PLAY ONLINE NOW
         </a>
+        <div class="live-counter">🟢 <span id="count-ttt">...</span> Log abhi online khel rahe hain</div>
 
-        <a href="https://imran13144.github.io/Magic-200-Pro/" class="btn play-btn">
+        <a href="https://imran13144.github.io/Magic-200-Pro/" class="btn play-btn" id="btn-magic">
             ✨ Play Magic 200 Pro
         </a>
+        <div class="live-counter">🟢 <span id="count-magic">...</span> Log abhi online khel rahe hain</div>
 
-        <a href="https://imran13144.github.io/Math-Merge/" class="btn play-btn">
+        <a href="https://imran13144.github.io/Math-Merge/" class="btn play-btn" id="btn-math">
             🧩 Play Math Merge
         </a>
+        <div class="live-counter">🟢 <span id="count-math">...</span> Log abhi online khel rahe hain</div>
 
         <a href="Magic 200 Pro.apk" download="Magic 200 Pro.apk" class="btn download-btn">
             📥 Download Magic 200
         </a>
 
-        <a href="Tic Tac Tae Pro.apk" download="Tic Tac Tae Pro.apk" class="btn download-btn">
+        <a href="Tic Tac Tae Pro.apk" download="Tic Tac Tae Pro.apk" class="btn download-btn" id="btn-apk-download">
             📥 FREE DOWNLOAD (APK)
         </a>
+        <div class="download-counter">📊 Total Downloads: <span id="count-apk">...</span></div>
 
         <a href="https://wa.me/919307679432?text=Hello!%20Maine%20aapka%20game%20dekha." class="btn whatsapp-btn">
             💬 WhatsApp Message
@@ -183,5 +210,52 @@
         &copy; 2026 Developed by Imran | Secure & Safe
     </div>
 
-</body>
+    <script>
+        // 1. Function to set random live players simulation
+        function simulateLivePlayers(elementId, baseMin, baseMax) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Random number generator
+                let count = Math.floor(Math.random() * (baseMax - baseMin + 1)) + baseMin;
+                element.textContent = count;
+
+                // Live feel dene ke liye har kuch der me count badalta rahega
+                setInterval(() => {
+                    let change = Math.floor(Math.random() * 5) - 2; // -2 se +2 ka change
+                    count += change;
+                    if (count < baseMin) count = baseMin;
+                    if (count > baseMax) count = baseMax;
+                    element.textContent = count;
+                }, 4000);
+            }
+        }
+
+        // Start simulations when page loads
+        simulateLivePlayers('count-ttt', 45, 85);    // Tic Tac Toe players
+        simulateLivePlayers('count-magic', 30, 65);  // Magic 200 players
+        simulateLivePlayers('count-math', 20, 50);   // Math Merge players
+
+        // 2. Click Counter Logic for APK Download
+        const apkBtn = document.getElementById('btn-apk-download');
+        const apkCountDisplay = document.getElementById('count-apk');
+
+        // Check if there is a previous count in browser memory, otherwise start at base number
+        let totalDownloads = localStorage.getItem('apk_downloads');
+        if (!totalDownloads) {
+            totalDownloads = 1250; // Pehle se dikhane ke liye ek aacha starting number
+            localStorage.setItem('apk_downloads', totalDownloads);
+        }
+        
+        apkCountDisplay.textContent = totalDownloads;
+
+        // When button is clicked, increase the count
+        if (apkBtn) {
+            apkBtn.addEventListener('click', function() {
+                totalDownloads = parseInt(totalDownloads) + 1;
+                localStorage.setItem('apk_downloads', totalDownloads);
+                apkCountDisplay.textContent = totalDownloads;
+            });
+        }
+    </script>
+    </body>
 </html>
